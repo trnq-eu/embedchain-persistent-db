@@ -20,7 +20,7 @@ def embedchain_bot(db_path, api_key):
                 "config": {
                     "model": "gpt-3.5-turbo-1106",
                     "temperature": 0.5,
-                    "max_tokens": 1000,
+                    "max_tokens": 4000,
                     "top_p": 1,
                     "stream": True,
                     "api_key": api_key,
@@ -37,8 +37,8 @@ def embedchain_bot(db_path, api_key):
 
 
 def get_db_path():
-    tmpdirname = tempfile.mkdtemp()
-    return tmpdirname
+    db_directory = 'embedchain-pdf-persistent/db'
+    return db_directory
 
 
 def get_ec_app(api_key):
@@ -87,7 +87,7 @@ with st.sidebar:
             st.stop()
     st.session_state["add_pdf_files"] = add_pdf_files
 
-st.title("📄 Embedchain - Chat with PDF")
+st.title("📄 Embedchain - Chat with your knowledgebase")
 styled_caption = '<p style="font-size: 17px; color: #aaa;">🚀 An <a href="https://github.com/embedchain/embedchain">Embedchain</a> app powered by OpenAI!</p>'  # noqa: E501
 st.markdown(styled_caption, unsafe_allow_html=True)
 
