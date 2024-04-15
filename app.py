@@ -75,7 +75,7 @@ with st.sidebar:
                 f.write(pdf_file.getvalue())
                 temp_file_name = f.name
             if temp_file_name:
-                st.markdown(f"Stor inserendo {file_name} all'interno della base di conoscenza...")
+                st.markdown(f"Sto inserendo {file_name} all'interno della base di conoscenza...")
                 app.add(temp_file_name, data_type="pdf_file")
                 st.markdown("")
                 add_pdf_files.append(file_name)
@@ -87,7 +87,7 @@ with st.sidebar:
     st.session_state["add_pdf_files"] = add_pdf_files
 
 st.title("📄 Interroga una base di conoscenza personalizzata")
-styled_caption = '<p style="font-size: 17px; color: #aaa;">🚀 An <a href="https://github.com/embedchain/embedchain">Embedchain</a> app powered by OpenAI!</p>'  # noqa: E501
+styled_caption = '<p style="font-size: 17px; color: #aaa;">Un chatbot che consente di dialogare con i propri documenti.</p>'  # noqa: E501
 st.markdown(styled_caption, unsafe_allow_html=True)
 
 if "messages" not in st.session_state:
@@ -119,7 +119,7 @@ if prompt := st.chat_input("Fammi una domanda"):
 
     with st.chat_message("assistant"):
         msg_placeholder = st.empty()
-        msg_placeholder.markdown("Thinking...")
+        msg_placeholder.markdown("Sto pensando...")
         full_response = ""
 
         q = queue.Queue()
