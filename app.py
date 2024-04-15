@@ -55,13 +55,12 @@ def get_ec_app(api_key):
 
 with st.sidebar:
     openai_access_token = st.text_input("OpenAI API Key", key="api_key", type="password")
-    "WE DO NOT STORE YOUR OPENAI KEY."
-    "Just paste your OpenAI API key here and we'll use it to power the chatbot. [Get your OpenAI API key](https://platform.openai.com/api-keys)"  # noqa: E501
+    "Inserisci la tua chiave di OpenAI"  # noqa: E501
 
     if st.session_state.api_key:
         app = get_ec_app(st.session_state.api_key)
 
-    pdf_files = st.file_uploader("Upload your PDF files", accept_multiple_files=True, type="pdf")
+    pdf_files = st.file_uploader("Carica i tuoi file PDF", accept_multiple_files=True, type="pdf")
     add_pdf_files = st.session_state.get("add_pdf_files", [])
     for pdf_file in pdf_files:
         file_name = pdf_file.name
@@ -76,18 +75,18 @@ with st.sidebar:
                 f.write(pdf_file.getvalue())
                 temp_file_name = f.name
             if temp_file_name:
-                st.markdown(f"Adding {file_name} to knowledge base...")
+                st.markdown(f"Stor inserendo {file_name} all'interno della base di conoscenza...")
                 app.add(temp_file_name, data_type="pdf_file")
                 st.markdown("")
                 add_pdf_files.append(file_name)
                 os.remove(temp_file_name)
             st.session_state.messages.append({"role": "assistant", "content": f"Added {file_name} to knowledge base!"})
         except Exception as e:
-            st.error(f"Error adding {file_name} to knowledge base: {e}")
+            st.error(f"Errore nell'inserire {file_name} all'interno della base di conoscenza: {e}")
             st.stop()
     st.session_state["add_pdf_files"] = add_pdf_files
 
-st.title("📄 Embedchain - Chat with your knowledgebase")
+st.title("📄 Interroga una base di conoscenza personalizzata")
 styled_caption = '<p style="font-size: 17px; color: #aaa;">🚀 An <a href="https://github.com/embedchain/embedchain">Embedchain</a> app powered by OpenAI!</p>'  # noqa: E501
 st.markdown(styled_caption, unsafe_allow_html=True)
 
@@ -96,8 +95,9 @@ if "messages" not in st.session_state:
         {
             "role": "assistant",
             "content": """
-                Hi! I'm chatbot powered by Embedchain, which can answer questions about your pdf documents.\n
-                Upload your pdf documents here and I'll answer your questions about them! 
+                Ciao. Sono un chatbot che risponderà con precisione alle tue domande su una base di conoscenza personalizzata.
+                Fammi una domanda, io consulterò i documenti caricati e risponderò citando la fonte
+                delle mie informazioni.
             """,
         }
     ]
@@ -106,9 +106,9 @@ for message in st.session_state.messages:
     with st.chat_message(message["role"]):
         st.markdown(message["content"])
 
-if prompt := st.chat_input("Ask me anything!"):
+if prompt := st.chat_input("Fammi una domanda"):
     if not st.session_state.api_key:
-        st.error("Please enter your OpenAI API Key", icon="🤖")
+        st.error("Inserisci la tua chiave di OpenAI", icon="🤖")
         st.stop()
 
     app = get_ec_app(st.session_state.api_key)
@@ -143,7 +143,7 @@ if prompt := st.chat_input("Ask me anything!"):
         thread.join()
         answer, citations = results["answer"], results["citations"]
         if citations:
-            full_response += "\n\n**Sources**:\n"
+            full_response += "\n\n**Fonti**:\n"
             sources = []
             for i, citation in enumerate(citations):
                 source = citation[1]["url"]
